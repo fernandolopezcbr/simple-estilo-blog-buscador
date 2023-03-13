@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
+    
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <style>
+
+html{
+            box-sizing: border-box;
+            font-family: 'Raleway', 'sans-serif';
+            font-size: 16px;
+        }
+
+        *,
+        *:after,
+        *:before{
+            box-sizing:inherit;
+        }
+
+        a{
+            color: #01579b;
+            transition: all .3s ease-out;
+        }
+
+        a:hover{
+            opacity:.75;
+        }
+
+        img{
+            max-width: 100%;
+            height: auto;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        hr{
+            border:thin solid #01579b;
+            margin: 3rem auto;
+            width: 80%;
+        }
+
+        .site{
+            margin: 1rem auto;
+            padding: 1rem;
+            max-width: 50%;
+            text-align: center;
+        }
+
+        .post{
+            margin: 1rem auto;
+            padding: 1rem;
+            border-radius: .5rem;
+            max-width: 80%;
+            text-align: center;
+            background-color: #eceff1;
+        }
+
+        .post-date{
+            margin: 1 rem auto;
+            display:block;
+            color: #666262;
+            
+        }
+
+        .post-content{
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+
+        
+        .post-content>article{
+            padding: 1rem;
+            background-color: #e3f2fd;
+        }
+
+
+        .post-content img{
+            max-width: 75%;
+            display:block;
+            margin: auto;
+        }
+
+        .loader{
+            display: none;
+            margin: 2rem auto;
+        }
+
+        input .form-control{
+            height: auto;
+        }
+
+        
+
+        input{
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color:  #eceff1;
+            width: 300px;
+            height: 45px;
+            max-width: 80%;
+            text-align: left;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            
+            
+        }
+        
+        ::placeholder{
+            color:black;
+            opacity: 0.7;
+        }
+
+
+        .card-title{
+            text-align: center;
+        }
+
+        button{
+            display: none;
+        }
+   
+
+        
+      </style>
+</head>
+<body>
+    
+    <div class="container mt-5">
+        <h1>Contenido del curso: </h1>
+        <br><br>
+        <input type="search" id="formulario" class="form-control my-2" placeholder="Buscar..." autocomplete="off">
+
+        <br><br>
+        <!---  Boton de busqueda al evento click-->
+
+        <button class="btn btn-info mb-2" id="boton"> Buscar</button>
+
+      
+
+    </div>
+
+
+
+    <div id="resultado">
+
+      
+    </div>
+
+    
+
+   
+
+
+
+
+
+    
+
+
+    <script>
+        
+     
+
+  
+        const $formulario = document.querySelector("#formulario"),
+        $boton = document.querySelector("#boton"),
+        $oneText = document.querySelector("#one-text"),
+        $image = document.querySelector("#image"),
+        $resultado = document.querySelector("#resultado");
+
+
+        const filtrar = async ()=>{
+          //$resultado.innerHTML = `<img class="loader" src="oval.svg"  alt="Cargando...">`;
+
+
+           let api = `https://api-data-bars-production.up.railway.app/api/notes`,
+            res = await fetch(api),
+            json = await res.json();
+
+
+            let filtrarcategoria = json.notes;
+
+
+            const filtrado = filtrarcategoria.filter(el => el.categoria === "tienda de licores");
+            
+
+          //let titulo = json.notes;
+          //console.log(titulo)
+            //console.log($formulario.value);
+
+            $resultado.innerHTML = "";
+
+            //$shows.innerHTML = "";
+            //$shows.appendChild($fragment);
+            //ocultar el loader
+   
+
+
+            const texto = $formulario.value.toLowerCase();
+            for(let producto of filtrado){
+                let nombre = producto.nombre.toLowerCase();
+                if(nombre.indexOf(texto) !== -1){
+                    
+                   
+                    //$resultado.innerHTML = `<h3 class="card-title">${producto.nombre} </h3>`;
+                    //$resultado.innerHTML += `<p class="card-text">${producto.description} </p>`;
+                    //$resultado.innerHTML = `<img src="${producto.imagen}" class="rounded mx-auto d-block">`;
+
+                    $resultado.innerHTML += `
+                    
+
+                    <article class="post">
+            <img class="post-image" alt="">
+            <aside>
+                <h2 class="post-title">${producto.nombre}</h2>
+                <figure class="post-autor"></figure>
+                <small class="post-date">fecha de publicacion : ${new Date(producto.date).toLocaleDateString()}</small>
+                <a href="post-link" target="_blank"></a>
+                <p class="post-excerpt"></p>
+                <div class="post-categories"></div>
+                <div class="post-tags"></div>
+                <details class="post-content">
+                    <summary>Ver contenido de la publicacion</summary>
+                    
+                    <article>
+                        <img src="${producto.imagen}">
+                    <p>${producto.description}</p>    
+                    </article>
+                </details>
+            </aside>
+        </article>
+        <hr>
+                      
+                      
+                      `;
+
+  
+
+
+                    
+                            
+
+                }
+                
+            }
+            
+
+            if($resultado.innerHTML === ""){
+                $resultado.innerHTML += `<h2 class="card-title"> Publicacion :  <mark>${texto}</mark> no encontrada</h2>`
+            }
+            
+        }
+
+        $boton.addEventListener("click", filtrar)
+        $formulario.addEventListener("keyup", filtrar)
+
+        filtrar();
+
+        
+
+    </script>
+</body>
+</html>
